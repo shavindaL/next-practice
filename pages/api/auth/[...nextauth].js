@@ -1,17 +1,20 @@
 import NextAuth from "next-auth"
-import GithubProvider from "next-auth/providers/google"
+import GoogleProvider from "next-auth/providers/google"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { Prisma } from "../../../prisma/client"
+import prisma, { Prisma } from "../../../prisma/client"
+
+const adapter = PrismaAdapter(prisma);
 
 export const authOptions = {
-  // Configure one or more authentication providers
-  providers: [
-    GithubProvider({
-      clientId: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
-    }),
-    // ...add more providers here
-  ],
-}
+    adapter: PrismaAdapter(prisma),
+    secret: process.env.SECRET,
+    providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_ID,
+            clientSecret: process.env.GOOGLE_SECRET,
+        }),
+        // ...add more providers here
+    ],
+} 
 
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);
